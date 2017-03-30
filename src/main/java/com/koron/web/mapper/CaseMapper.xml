@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koron.web.mapper.CaseMapper">
+	<select id="getAll" resultType="com.koron.web.bean.CaseBean">
+		select * from tblcase
+		where status != 2
+	</select>
+	<insert id="addCase" useGeneratedKeys="true" keyProperty="id" parameterType="com.koron.web.bean.CaseBean">
+	   insert into 
+	   tblcase (name,description,lng,lat,status,picid,address) 
+	   values(#{name},#{description},#{lng},#{lat},#{status},#{picid},#{address})
+	</insert>
+	<update id="updateCase" parameterType="com.koron.web.bean.CaseBean">
+	   update tblcase 
+	   set status=#{status}
+	   where id=#{id}
+	</update>
+	<select id="getCaseById" resultType="com.koron.web.bean.CaseBean">
+		select * from tblcase
+		where id = #{id}
+	</select>
+</mapper>

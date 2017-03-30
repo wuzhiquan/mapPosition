@@ -1,0 +1,178 @@
+@charset "UTF-8";
+/**
+ * Foundation for Sites by ZURB
+ * Version 6.2.3
+ * foundation.zurb.com
+ * Licensed under MIT Open Source
+ */
+/**用来进行等分水平排列,第一个参数为每行列数，第个参数为高度，缺省为100%*/
+body, html {
+  height: 100%;
+  -webkit-tap-highlight-color: transparent;
+  font-family: "Microsoft Yahei","微软雅黑"; }
+
+input, label, select, option, textarea, button, fieldset, legend {
+  font-family: "Microsoft Yahei","微软雅黑"; }
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+a {
+  text-decoration: none; }
+
+/**
+*	菜单
+*	属性依次为背景色，左边间距 字体大小
+*/
+/**
+*	菜单项。前面图标用i标签，后面图标用em标签
+*	参数依次为 背景颜色 右边数字的背景色
+*/
+/**
+*	数字小方块显示
+*   参数依次为  背景色 字体大小  整个行高
+*/
+/**
+*  用来布局
+*/
+/**
+* 用来定义一个块
+* 用来定义，色块的参数 宽度  高度 背景色
+*/
+/**
+*	用来清除浮动
+*
+*/
+@media screen and (min-width: 64rem) {
+  html {
+    font-size: 16px; } }
+@media screen and (max-width: 64rem) {
+  html {
+    font-size: 12px; } }
+body {
+  text-align: center; }
+
+.container {
+  width: 23rem;
+  height: 100%;
+  margin: 3rem auto;
+  display: table;
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif, PingFangSC-Regular;
+  color: #2a2a2a; }
+  .container > p {
+    margin-bottom: 3rem;
+    font-size: 2rem;
+    font-weight: 100; }
+  .container .footer {
+    margin-top: 3rem;
+    font-size: 0.75rem;
+    color: #b7b7b7; }
+    .container .footer > p {
+      margin: 0.5rem 0; }
+
+.box {
+  width: 100%;
+  padding: 2px 3rem 2rem;
+  background-color: #f7f7f7;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+  border-radius: 0.5rem; }
+  .box > div {
+    width: 100%; }
+    .box > div.last {
+      margin-bottom: 2rem;
+      vertical-align: middle; }
+      .box > div.last input {
+        width: 70%;
+        background-color: white;
+        border: 1px solid #dedede;
+        height: 2.75rem;
+        margin: 0.5rem 0;
+        vertical-align: middle; }
+      .box > div.last i {
+        width: 30%;
+        background-color: lightgray;
+        height: 2.75rem;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 2.75rem; }
+    .box > div h3 {
+      margin: 2rem auto;
+      color: #7b7b7b;
+      font-weight: lighter; }
+  .box input[type=text],
+  .box input[type=password] {
+    width: 100%;
+    background-color: white;
+    border: 1px solid #dedede;
+    height: 2.75rem;
+    margin: 0.5rem 0;
+    padding-left: 1rem;
+    -webkit-appearance: none; }
+  .box #appendix {
+    text-align: left;
+    line-height: 2rem;
+    font-size: 0.75rem;
+    color: #b7b7b7;
+    vertical-align: middle; }
+    .box #appendix input[type="checkbox"] {
+      margin-right: 0.5rem; }
+    .box #appendix strong {
+      float: right;
+      display: inline-block; }
+
+#loginbtn {
+  display: inline-block;
+  text-align: center;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-appearance: none;
+  transition: background-color 0.25s ease-out, color 0.25s ease-out;
+  vertical-align: middle;
+  border: 1px solid transparent;
+  border-radius: 0;
+  padding: 0.85em 1em;
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+  background-color: #2199e8;
+  color: #fefefe;
+  display: block;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
+  -webkit-border-radius: 0.5rem;
+  -moz-border-radius: 0.5rem;
+  -ms-border-radius: 0.5rem;
+  -o-border-radius: 0.5rem;
+  border-radius: 0.5rem;
+  height: 2.75rem;
+  font-size: 1rem;
+  font-weight: lighter; }
+  [data-whatinput='mouse'] #loginbtn {
+    outline: 0; }
+  #loginbtn:hover, #loginbtn:focus {
+    background-color: #1583cc;
+    color: #fefefe; }
+
+input::-webkit-input-placeholder {
+  /* WebKit browsers */
+  color: #b7b7b7; }
+
+input:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #b7b7b7; }
+
+input::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #b7b7b7; }
+
+input:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: #b7b7b7; }
+
+/*# sourceMappingURL=login.css.map */

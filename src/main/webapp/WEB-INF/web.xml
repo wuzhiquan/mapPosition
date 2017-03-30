@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" id="WebApp_ID" version="3.0"
+	xsi:schemaLocation="file:///C:/Users/swan/Desktop/web/web-app_3_0.xsd">
+  <display-name>SimpleProject</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+  </listener>
+ <filter>
+    <description>过滤需要微信信息的url</description>
+  	<filter-name>WXFilter</filter-name>
+  	<filter-class >com.swan.weixin.WXFilter</filter-class>
+  	<init-param>
+  	    <description>url正则：需要获取openid</description>
+		<param-name>urlRegxBase</param-name>
+		<param-value>.*\.wxbase\.htm$</param-value>
+	</init-param>
+	<init-param>
+  	    <description>url正则：需要获取用户基本信息</description>
+		<param-name>urlRegxInfo</param-name>
+		<param-value>.*\.wxinfo\.htm$</param-value>
+	</init-param>
+	<init-param>
+  	    <description>session存放信息的key：存放openid</description>
+		<param-name>sessionKeyOpenid</param-name>
+		<param-value>_openid</param-value>
+	</init-param>
+	<init-param>
+  	    <description>session存放信息的key：存放用户信息 </description>
+		<param-name>sessionKeyUserinfo</param-name>
+		<param-value>_wxuserinfo</param-value>
+	</init-param>
+	<init-param>
+  	    <description>状态码 ：需要授权</description>
+		<param-name>msgcode</param-name>
+		<param-value>10003</param-value>
+	</init-param>
+  </filter>
+  <filter-mapping>
+  	<filter-name>WXFilter</filter-name>
+  	<url-pattern>*.htm</url-pattern>
+  </filter-mapping>  
+  <servlet>
+    <servlet-name>swan</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath*:/SampleMVC.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>swan</servlet-name>
+    <url-pattern>*.htm</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>swan</servlet-name>
+    <url-pattern>/cache/*</url-pattern>
+  </servlet-mapping>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath*:/SampleMVC.xml</param-value>
+  </context-param>
+</web-app>

@@ -1,0 +1,233 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>浏览器定位</title>
+    <link rel="stylesheet" href="css/inputPeople.css"/>
+    <script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=304b262be92c183132c134b43a87d7d2"></script>
+<body>
+<!-- <div class="mapArea">
+	<div id='container'></div>
+	<div id="tip"></div>
+</div> -->
+<div class="infoArea">
+	姓名：<input id="name" type="text" value=""/>
+	<br>
+	<br>
+	手机：<input id="phone" type="text"/>
+	<br>
+	<br>
+	<button id="onBtn">上班</button>
+</div>
+<div class="mask">
+	<button id="offBtn">下班</button>
+</div>
+<p style="text-align:center;">显示当前的经纬度,ID:${session._openid}（用于测试）</p>
+<p id="inner"></p>
+<script type="text/javascript">
+	var off = false;
+    var map, geolocation;
+    //加载地图，调用浏览器定位服务
+    map = new AMap.Map('container', {
+        resizeEnable: true
+    });
+    map.plugin('AMap.Geolocation', function() {
+        geolocation = new AMap.Geolocation({
+            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+            timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+            zoomToAccuracy: true,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+            buttonPosition:'RB'
+        });
+        map.addControl(geolocation);
+        geolocation.getCurrentPosition();
+        AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+    });
+    //解析定位结果
+    function onComplete(data) {
+    	console.log(data);
+        $('#onBtn').click(function() {
+        	if ($('#name').val() == '' || $('#phone').val() == '') {
+        		alert('信息不完整');
+        		return;
+        	}
+        	$('#name').attr('readonly','readonly');
+        	$('#phone').attr('readonly','readonly');
+        	var postData = {
+        		name: $('#name').val(),
+        		phone: $('#phone').val(),
+        		lng: data.position.lng, // 经度
+            	lat: data.position.lat, // 纬度
+            	status: 1
+        	}
+            console.log(postData);
+        	$.ajax({
+        		url:'${ctxPath}/getCount.htm',
+        		data: {name: $('#name').val()},
+        		type: 'POST',
+        		dataType: 'json',
+        		success: function (data) {
+        			console.log(data);
+        			if(data.code < 0) {
+        				$.ajax({
+                    		url:'${ctxPath}/input.htm',
+                    		data: postData,
+                    		type: 'POST',
+                    		dataType: 'json',
+                    		success: function (message) {
+                    			console.log(message);
+                    			var timer = setInterval(function () {
+			        				var map, geolocation;
+			        			    //加载地图，调用浏览器定位服务
+			        			    map = new AMap.Map('container', {
+			        			        resizeEnable: true
+			        			    });
+			        			    map.plugin('AMap.Geolocation', function() {
+			        			    	geolocation = new AMap.Geolocation({
+			        			            enableHighAccuracy: true,
+			        			            timeout: 10000, 
+			        			            buttonOffset: new AMap.Pixel(10, 20),
+			        			            zoomToAccuracy: true, 
+			        			            buttonPosition:'RB'
+			        			        });
+			        			        map.addControl(geolocation);
+			        			        geolocation.getCurrentPosition();
+			        			        AMap.event.addListener(geolocation, 'complete', okFn);//返回定位信息
+			        			        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+			        			    });
+			        			    function okFn(pos){
+			        			    	$('#inner').text('经度：'+pos.position.lng+'，纬度：'+pos.position.lat);
+			        		        	$('.mask').show();
+			        			    	$.ajax({
+				                    		url:'${ctxPath}/addTrack.htm',
+				                    		data: {
+				                    			userId : message.data,
+				        			    		lat: pos.position.lat,
+				        			    		lng: pos.position.lng
+				                    		},
+				                    		type: 'POST',
+				                    		dataType: 'json',
+				                    		success: function (item) {
+				                    			console.log(item);
+				                    		}
+				                    	})
+				                    	$.ajax({
+			                    			url:'${ctxPath}/updateAddress.htm',
+			                    			data: {
+				                    			id : message.data,
+				        			    		lat: pos.position.lat,
+				        			    		lng: pos.position.lng,
+				        			    		phone: $('#phone').val(),
+				        			    		status: 1
+				                    		},
+				                    		type: 'POST',
+				                    		dataType: 'json',
+				                    		success: function (item) {
+				                    			console.log(item);
+				                    		}
+			                    		});
+			        			    }
+			        			}, 1000); // 1分钟记录一次
+			        			$('#offBtn').click(function () {
+			        				$('.mask').hide();
+			        				clearInterval(timer);
+			        				$.ajax({
+			                    		url:'${ctxPath}/updateStatus.htm',
+			                    		data: {
+			                    			id : message.data,
+			                    			status: 0
+			                    		},
+			                    		type: 'POST',
+			                    		dataType: 'json',
+			                    		success: function (item) {
+			                    			console.log(item);
+			                    		}
+			                    	})
+			        			});
+                    		}
+                    	})
+        			} else {
+        				var timer = setInterval(function () {
+	        				var map, geolocation;
+	        			    //加载地图，调用浏览器定位服务
+	        			    map = new AMap.Map('container', {
+	        			        resizeEnable: true
+	        			    });
+	        			    map.plugin('AMap.Geolocation', function() {
+	        			    	geolocation = new AMap.Geolocation({
+	        			            enableHighAccuracy: true,
+	        			            timeout: 10000, 
+	        			            buttonOffset: new AMap.Pixel(10, 20),
+	        			            zoomToAccuracy: true, 
+	        			            buttonPosition:'RB'
+	        			        });
+	        			        map.addControl(geolocation);
+	        			        geolocation.getCurrentPosition();
+	        			        AMap.event.addListener(geolocation, 'complete', okFn);//返回定位信息
+	        			        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+	        			    });
+	        			    function okFn(pos){
+	        			    	$('#inner').text('经度：'+pos.position.lng+'，纬度：'+pos.position.lat);
+	        			    	$('.mask').show();
+	        			    	$.ajax({
+		                    		url:'${ctxPath}/addTrack.htm',
+		                    		data: {
+		                    			userId : data.code,
+		        			    		lat: pos.position.lat,
+		        			    		lng: pos.position.lng
+		                    		},
+		                    		type: 'POST',
+		                    		dataType: 'json',
+		                    		success: function (item) {
+		                    			console.log(item);
+		                    		}
+		                    	})
+		                    	$.ajax({
+	                    			url:'${ctxPath}/updateAddress.htm',
+	                    			data: {
+		                    			id : data.code,
+		        			    		lat: pos.position.lat,
+		        			    		lng: pos.position.lng,
+		        			    		phone: $('#phone').val(),
+		        			    		status: 1
+		                    		},
+		                    		type: 'POST',
+		                    		dataType: 'json',
+		                    		success: function (item) {
+		                    			console.log(item);
+		                    		}
+	                    		});
+	        			    }
+	        			}, 1000); // 1分钟记录一次
+	        			$('#offBtn').click(function () {
+	        				$('.mask').hide();
+	        				clearInterval(timer);
+	        				$.ajax({
+	                    		url:'${ctxPath}/updateStatus.htm',
+	                    		data: {
+	                    			id : data.code,
+	                    			status: 0
+	                    		},
+	                    		type: 'POST',
+	                    		dataType: 'json',
+	                    		success: function (item) {
+	                    			console.log(item);
+	                    		}
+	                    	})
+	        			});
+        			}
+        		}
+        	})
+        });
+    }
+    //解析定位错误信息
+    function onError(data) {
+        //document.getElementById('tip').innerHTML = '定位失败';
+    }
+</script>
+</body>
+</html>

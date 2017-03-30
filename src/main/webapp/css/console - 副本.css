@@ -1,0 +1,353 @@
+@charset "UTF-8";
+body, html {
+  height: 100%;
+  -webkit-tap-highlight-color: transparent;
+  font-family: "Microsoft Yahei","微软雅黑"; }
+
+input, label, select, option, textarea, button, fieldset, legend {
+  font-family: "Microsoft Yahei","微软雅黑"; }
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+a {
+  text-decoration: none; }
+@media screen and (min-width: 64rem) {
+  html {
+    font-size: 16px; } }
+@media screen and (max-width: 64rem) {
+  html {
+    font-size: 12px; } }
+body {
+  text-align: center; }
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+#map {
+  width: 100%;
+  height:100%;
+  display: block;
+}
+.opeArea{
+	position:fixed;
+	top:24px;
+	left:24px;
+	height: 500px;
+}
+.opeArea:after{
+	content:'.';
+	height:0;
+	display:block;
+	visibility: hidden;
+	clear:both;
+}
+.opeArea .block_part1,
+.opeArea .block_part2{
+	float:left;
+}
+.block_part2{
+	margin-left:20px;
+}
+.opeArea .part1_icon,
+.opeArea .part2_icon{
+	width:52px;
+	height:52px;
+	border-radius:50%;
+	background:#fff;
+	cursor:pointer;
+	margin-left: 18px;
+}
+.opeArea .part2_icon{
+	position:relative;
+}
+.opeArea .part2_icon em{
+	position:absolute;
+	display:block;
+	width:20px;
+	height:20px;
+	font-size:12px;
+	background:#f66;
+	text-align:center;
+	line-height:20px;
+	color:#fff;
+	border-radius:50%;
+	right:0;
+	top:0;
+	font-style:normal;
+}
+.opeArea .block_part1 img,
+.opeArea .block_part2 img{
+	margin-top:12px;
+}
+.block_part1 .content{
+	display:none;
+	position: relative;
+	width:410px;
+	background:#fff;
+	border-radius:8px;
+	margin-top:20px;
+}
+.block_part1 .content i{
+    display: block;
+    width: 0;
+    height: 0;
+    border: 16px solid transparent;
+    position: absolute;
+    top: -31px;
+    left: 27px;
+    border-bottom-color: #fff;
+}
+.block_part1 .block-bar{
+	height:50px;
+	text-align:center;
+	overflow:hidden;
+	cursor:pointer;
+	background:#ececec;
+}
+.block_part1 .block-bar>span{
+	width:50%;
+	display:block;
+	float:left;
+	height:50px;
+	line-height:50px;
+	font-size:16px;
+}
+.block_part1 .block-bar span.active{
+	background:#fff;
+}
+.footer{
+	position:fixed;
+	z-index:1000;
+	width: 346px;
+	bottom:15px;
+	left:50%;
+	margin-left:-173px;
+	background:#fff;
+	border-radius:8px;
+	text-align:center;
+	height:66px;
+}
+.footer p{
+	font-size:12px;
+	margin: 0;
+}
+.footer img{
+	width:121px;
+	margin-top:9px;
+	margin-bottom:4px;
+}
+/*在勤人员部分样式*/
+.scroll{
+	max-height:380px;
+	background:#fff;
+	width:100%;
+	overflow: auto;
+}
+.scroll::-webkit-scrollbar-track{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+  border-radius: 12px;
+  background-color: transparent;
+}
+.scroll::-webkit-scrollbar{
+  width: 7px;
+  border-radius: 12px;
+  background-color: transparent;
+}
+.scroll::-webkit-scrollbar-thumb{
+  border-radius: 12px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,1);
+  background-color: #fff;
+}
+.staffWrap ul{
+	list-style:none;
+	background:#fbfbfb;
+	padding:8px;
+	margin:0;
+	display:none;
+}
+.staffWrap ul li{
+	height:36px;
+	line-height:36px;
+	overflow: hidden;
+	padding: 0 8px 0 30px;
+    font-size: 16px;
+}
+.staffWrap ul li> span{
+	float:left;
+}
+/*.staffWrap ul li:after{
+	content:'.';
+	height:0;
+	display:block;
+	visibility: hidden;
+	clear:both;
+}*/
+.staffWrap ul li button{
+	background:#5dc1ff;
+	outline:none;
+	border:none;
+	border-radius:5px;
+	width:56px;
+	height:26px;
+	line-height:1.5;
+	color:#fff;
+	float:right;
+	margin-top:5px;
+	font-size:14px;
+	cursor:pointer;
+}
+.staffInfo{
+	height:50px;
+	line-height:50px;
+	font-size:22px;
+	cursor:pointer;
+}
+.staffInfo.active .name{
+	color:#5dd7ff;
+}
+.staffInfo>span{
+	position:relative;
+}
+.staffInfo>span.name{
+	padding-left:40px;
+	float:left;
+}
+.staffInfo>span.name em{
+	left:18px;
+	background:url('../images/positionIcon.png');
+	width:16px;
+	height:21px;
+}
+.staffInfo>span.num{
+	float:right;
+	font-size:14px;
+	padding-right:40px;
+	color:#b4b4b4;
+}
+.staffInfo>span.num .peopleIcon{
+	width:14px;
+	height:17px;
+	background:url('../images/peopleIcon.png');
+	left: -18px;
+}
+.staffInfo>span.num .directionIcon{
+	width:18px;
+	height:11px;
+	background:url('../images/downIcon.png');
+	right:15px;
+}
+.staffInfo.active>span.num .directionIcon{
+	background:url('../images/upIcon.png');
+}
+.staffInfo em{
+	display:inline-block;
+	position:absolute;
+	top:0;
+	bottom:0;
+	margin:auto;
+}
+/*区域列表部分样式*/
+.areaWrap{
+	display:none;
+}
+.areaInfo{
+	padding:15px;
+	border-bottom:1px solid #f0f0f0;
+}
+.areaInfo p{
+	margin:0;
+	text-align:left;
+	padding-left:12px;
+}
+.areaInfo .title{
+	font-size:26px;
+	margin: 2px 0 10px;
+}
+.areaInfo .event,
+.areaInfo .plan,
+.areaInfo .actual{
+	font-size:18px;
+	height:40px;
+	line-height: 40px;
+	position:relative;
+	padding-right:20px;
+}
+.areaInfo p em{
+	position:absolute;
+	display:block;
+	top:0;
+	bottom:0;
+	margin:auto;
+}
+.areaInfo p span{
+	padding-left:30px;
+}
+.areaInfo p span.right{
+	float:right;
+}
+.areaInfo p.event em{
+	width:23px;
+	height:29px;
+	background:url('../images/eventIcon.png');
+}
+.areaInfo p.plan em{
+	width:23px;
+	height:19px;
+	background:url('../images/planeIcon.png');
+}
+.areaInfo p.actual em{
+	width:23px;
+	height:23px;
+	background:url('../images/okIcon.png');
+}
+.block_part2 .content{
+	position: relative;
+    width: 350px;
+    background: #fff;
+    border-radius: 8px;
+    margin-top: 20px;
+    padding: 0 15px 10px;
+    display:none;
+}
+.block_part2 .content i {
+    display: block;
+    width: 0;
+    height: 0;
+    border: 16px solid transparent;
+    position: absolute;
+    top: -31px;
+    left: 27px;
+    border-bottom-color: #fff;
+}
+.block_part2 .content .column{
+	height:38px;
+	line-height:38px;
+	text-align:left;
+	border-bottom:1px solid #e6e6e6;
+	margin:0;
+}
+.block_part2 .content .message{
+	max-height:320px;
+}
+.block_part2 .message ul{
+	list-style:none;
+	padding:0;
+	margin:0;
+}
+.block_part2 .message ul li{
+	height:36px;
+	line-height:36px;
+	overflow:hidden;
+	font-size:16px;
+}
+.block_part2 .message ul li span{
+	float:left;
+}
+.block_part2 .message ul li  span.time{
+	float:right;
+	color:#8a8a8a;
+}

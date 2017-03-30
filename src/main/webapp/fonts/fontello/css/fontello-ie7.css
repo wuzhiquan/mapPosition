@@ -1,0 +1,26 @@
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'fontello';
+  font-style: normal;
+  font-weight: normal;
+ 
+  /* fix buttons height */
+  line-height: 1em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+}
+ 
+.icon-search { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe800;&nbsp;'); }
+.icon-mail { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe801;&nbsp;'); }
+.icon-cog { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe802;&nbsp;'); }
+.icon-bell { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe803;&nbsp;'); }
+.icon-clipboard { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe804;&nbsp;'); }
+.icon-spin5 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe838;&nbsp;'); }
+.icon-menu { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf0c9;&nbsp;'); }
+.icon-angle-double-left { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf100;&nbsp;'); }
+.icon-angle-double-right { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf101;&nbsp;'); }
+.icon-angle-left { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf104;&nbsp;'); }
+.icon-angle-right { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf105;&nbsp;'); }
+.icon-angle-up { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf106;&nbsp;'); }
+.icon-angle-down { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf107;&nbsp;'); }
+.icon-circle-thin { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xf1db;&nbsp;'); }

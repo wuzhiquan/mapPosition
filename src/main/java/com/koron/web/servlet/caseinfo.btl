@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>案件详情</title>
+    <script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/dialog-min.js" type="text/javascript" charset="utf-8"></script>
+    <link href="css/ui-dialog.css" rel="stylesheet" type="text/css" />
+    <style>
+    	button{
+    		display:none;
+    		cursor:pointer;
+    	}
+    </style>
+<body>
+<h1 id="casename"></h1>
+<p id="description"></p>
+<p id="address"></p>
+<p id="createtime"></p>
+<img alt="" src="" id="casepic" style="max-width:100%;max-height:300px;">
+<p id="remark"></p>
+<p id="username"></p>
+<p id="ramarkmsg"></p>
+<button id="reciveBtn">接受案件</button>
+<button id="doneBtn">提交完成</button>
+<script type="text/javascript">
+function GetQueryString(name){
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);
+     if(r!=null)return  unescape(r[2]); return null;
+}
+commitData("${ctxPath}/getCaseInfoById.htm",{id: GetQueryString("id")},{success:function(msg) {
+	console.log(msg);
+	$("#casename").text("案件名称："+msg.data.casename);
+	$("#description").text("案件描述："+msg.data.description);
+	$("#address").text("案件地址："+msg.data.address);
+	$("#createtime").text("发生时间："+msg.data.createtime);
+	$("#casepic").attr("src","${ctxPath}/file/get.htm?id="+msg.data.picid);
+	$("#remark").text("备注："+msg.data.remark);
+	$("#username").text("案件处理人："+msg.data.username);
+	if(msg.data.status == 0){
+		$("#reciveBtn").show();
+		$("#doneBtn").hide();
+	}
+	if(msg.data.status == 1){
+		$("#reciveBtn").hide();
+		$("#doneBtn").show();
+	}
+	if(msg.data.status == 2){
+		$("#ramarkmsg").text('案件已完成');
+	}
+	$("#reciveBtn").click(function(){
+		commitData("${ctxPath}/updateCaseStatus.htm",{id:msg.data.caseid,status: 1},{success:function(item){
+			console.log(item);
+			$("#reciveBtn").hide();
+			$("#doneBtn").show();
+			// 接受案件
+			commitData("${ctxPath}/addWXmessage1.htm",{
+				content: "[案件接受消息]"+msg.data.username+"接受处理案件《"+msg.data.casename+"》",
+				userid: msg.data.userid,
+				msgType: 'case',
+				msgId: ""
+			},{success:function (temp){
+				console.log(temp);
+			}})
+		}})
+	})
+	$("#doneBtn").click(function(){
+		// 申请完成
+		commitData("${ctxPath}/addWXmessage1.htm",{
+			content: msg.data.caseid+"/[案件处理消息];"+msg.data.username+"处理的案件《"+msg.data.casename+"》申请完成/"+msg.data.status,
+			userid: msg.data.userid,
+			msgType: 'case',
+			msgId: ""
+		},{success:function (temp){
+			console.log(temp);
+			var d = dialog({
+			    content: '申请已提交'
+			});
+			d.showModal();
+			setTimeout(function () {
+			    d.close().remove();
+			    $("#doneBtn").hide();
+			}, 1500);
+		}})
+	})
+}});
+</script>
+</body>
+</html>

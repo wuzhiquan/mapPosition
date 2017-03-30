@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koron.web.mapper.InputMapper">
+	<insert id="addPeople" useGeneratedKeys="true" keyProperty="id" parameterType="com.koron.web.bean.PersonBean">
+	   insert into 
+	   personinfo (name,phone,lng,lat,inputTime,status,openid) 
+	   values(#{name},#{phone},#{lng},#{lat},current_timestamp(),#{status},#{openid})
+	</insert>
+	<select id="getList" resultType="com.koron.web.bean.PersonBean">
+		select *
+		from personinfo where `status`=1
+	</select>
+	<select id="getCount" resultType="Integer">
+		select id from personinfo
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="name!=null">and name=#{name}</if>
+		</trim>
+		limit 1
+	</select>
+	<select id="getOpenid" resultType="String">
+		select openid from personinfo
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="id!=null">and id=#{id}</if>
+		</trim>
+		limit 1
+	</select>
+	<select id="getUserByOpenid" resultType="com.koron.web.bean.PersonBean">
+		select * from personinfo
+		where openid = #{openid}
+	</select>
+	<select id="getUserByName" resultType="com.koron.web.bean.PersonBean">
+		select name,id,inputTime,lat,lng,phone,rangeid,status
+		from personinfo
+		where name = #{name}
+		limit 1
+	</select>
+	<update id="updatePeopleAddress" parameterType="com.koron.web.bean.PersonBean">
+	   update personinfo 
+	   set lng=#{lng},lat=#{lat},phone=#{phone},status=#{status}
+	   where id=#{id}
+	</update>
+	<update id="updateStatus" parameterType="com.koron.web.bean.PersonBean">
+	   update personinfo 
+	   set status=#{status}
+	   where id=#{id}
+	</update>
+</mapper>

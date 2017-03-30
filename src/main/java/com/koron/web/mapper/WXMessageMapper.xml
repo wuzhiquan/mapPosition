@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koron.web.mapper.WXMessageMapper">
+	<insert id="addWXTextMessage">
+	   insert into 
+	   tblmessage (userid,content,msgType,msgId) 
+	   values(#{userid},#{bean.content},#{bean.msgType},#{bean.msgId})
+	</insert>
+	<insert id="addWXMessage">
+	   insert into 
+	   tblmessage (userid,content,msgType,msgId) 
+	   values(#{userid},#{content},#{msgType},#{msgId})
+	</insert>
+	<insert id="addWXImageMessage">
+	   insert into 
+	   tblmessage (userid,picUrl,msgType,msgId,mediaId) 
+	   values(#{userid},#{bean.picUrl},#{bean.msgType},#{bean.msgId},#{bean.mediaId})
+	</insert>
+	<insert id="addWXLocationMessage">
+	   insert into 
+	   tblmessage (userid,label,msgType,msgId,location_X,location_Y,scale) 
+	   values(#{userid},#{bean.label},#{bean.msgType},#{bean.msgId},#{bean.location_X},#{bean.location_Y},#{bean.scale})
+	</insert>
+	<select id="getList" resultType="com.koron.web.bean.WXMessageBean">
+		select a.*,b.name,c.url as picRealUrl
+		from tblmessage a
+		left join personinfo b
+		on a.userid = b.id
+		left join tblfile c
+		on a.picUrl = c.id
+		order by a.status asc,a.createTime desc
+	</select>
+	<select id="getWXMessageBeanByMsgid" resultType="com.koron.web.bean.WXMessageBean">
+		select *
+		from tblmessage
+		where msgId=#{msgId}
+	</select>
+	<update id="updateStatus" parameterType="com.koron.web.bean.WXMessageBean">
+	   update tblmessage 
+	   set status=#{status}
+	   where id=#{id}
+	</update>
+	<insert id="addWXMessageSend">
+	   insert into 
+	   tblmessagesend (userid,picUrl,msgType,content) 
+	   values(#{userid},#{picUrl},#{msgType},#{content})
+	</insert>
+	<select id="getAllList" resultType="com.koron.web.bean.WXMessageBean">
+		select userid,content,picUrl,createTime,msgType,label,status
+		from tblmessage
+		where userid = #{userid}
+		union
+		select userid,content,picUrl,createTime,msgType,label,status
+		from tblmessagesend
+		where userid = #{userid}
+		order by createTime asc
+	</select>
+</mapper>

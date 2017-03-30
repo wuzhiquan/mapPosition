@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+    http://www.springframework.org/schema/tx   
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd  
+    http://www.springframework.org/schema/context  
+    http://www.springframework.org/schema/context/spring-context-4.0.xsd
+    http://www.springframework.org/schema/mvc  
+    http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+	<context:component-scan base-package="com.koron.web" />
+	<mvc:annotation-driven>
+	  <mvc:message-converters>
+	    <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+	         <property name="defaultCharset" value="UTF-8"/>  
+	    </bean>
+	  </mvc:message-converters>
+	  <!--mvc:argument-resolvers>
+	    <bean class="org.swan.web.util.PersonResolver" />
+	  </mvc:argument-resolvers-->
+	</mvc:annotation-driven>
+	<bean id="moduleService" class="org.koron.ebs.module.ModuleService" factory-method="newInstance" ></bean>
+	<bean id="initParam" class="com.koron.web.servlet.InitParam">
+		<constructor-arg>
+			<ref bean="moduleService"/>
+		</constructor-arg>
+	</bean>
+	<bean id="beetlResource" class="org.beetl.core.resource.ClasspathResourceLoader"></bean>
+	<bean id="beetlConfig" class="org.beetl.ext.spring.BeetlGroupUtilConfiguration" init-method="init">
+		<property name="resourceLoader" ref="beetlResource"/>
+	</bean>
+	<bean id="viewResolver" class="org.beetl.ext.spring.BeetlSpringViewResolver">
+		<property name="viewNames">
+			<list>
+				<value>*.btl</value>
+			</list>
+		</property>
+		<property name="contentType" value="text/html;charset=UTF-8" />
+	</bean>
+	<bean name="config" class="com.koron.util.Config">
+  		<property name="uploadpath" value="D:\img"/>
+  		<property name="contentpath" value="http://192.168.0.116:8081/wxtest"/>
+  	</bean>
+  	<bean name="configBean" class="com.swan.weixin.ConfigBean">
+  		<property name="appid" value="wx84881e2375972219"/>
+  		<property name="appsecret" value="65d58db527fc7270bacd7650fa4dd7d4"/>
+  		<property name="token" value="fzw"/>
+  		<property name="wXServerPrefix" value="http://wzq.tunnel.phpor.me/"/>
+  	</bean>
+  	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+  	<!--限制上传文件大小  -->
+	    <property name="maxUploadSize" value="300000"/>
+	    <property name="maxInMemorySize" value="10240" />
+	</bean>
+</beans>

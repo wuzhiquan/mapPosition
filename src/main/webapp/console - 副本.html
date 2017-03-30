@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>控制台</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/console.js" type="text/javascript" charset="utf-8"></script>
+
+    <link href="fonts/fontello/css/fontello.css" rel="stylesheet" type="text/css" />
+    <link href="css/normalize.css" rel="stylesheet" type="text/css" />
+    <link href="css/console.css" rel="stylesheet" type="text/css" />
+    <script src="http://webapi.amap.com/maps?v=1.3&key=d439c02c73e44c7a0e37290430d4a6d1&plugin=AMap.PolyEditor"></script>
+<body>
+    <div class="container">
+        <!-- <img src="images/logo.png">
+        <p id="info">科荣软件，让管理更简单</p> -->
+        <div class="box" id="map"></div>
+        <!-- <div class="footer">
+	        <div id="users"><span>4444</span></div>
+	        <input type="button" value="info" onclick="districtInfo();"/>
+	        <p>&copy;copyright 2008-2014 koronsoft Inc. All Rights Reserved</p>
+	        <p>Powered by AIO V7</p>
+        </div> -->
+        <div class="opeArea">
+        	<div class="block_part1">
+        		<div class="part1_icon">
+        			<img src="images/icon1.png"/>
+        		</div>
+        		<div class="content">
+        			<i></i>
+        			<div class="block-bar">
+        				<span class="staffbar active">在勤人员列表</span>
+        				<span class="areabar">区域列表</span>
+        			</div>
+        			<div class="staffWrap scroll">
+       					<div class="staffInfo">
+       						<span class="name"><em class="positionIcon"></em>深圳大学区</span>
+       						<span class="num"><em class="peopleIcon"></em>10人<em class="directionIcon"></em></span>
+       					</div>
+       					<ul></ul>
+       					<div class="staffInfo">
+       						<span class="name"><em class="positionIcon"></em>白石洲区</span>
+       						<span class="num"><em class="peopleIcon"></em>1人<em class="directionIcon"></em></span>
+       					</div>
+       					<ul></ul>
+       					<div class="staffInfo">
+       						<span class="name"><em class="positionIcon"></em>世界之窗区</span>
+       						<span class="num"><em class="peopleIcon"></em>8人<em class="directionIcon"></em></span>
+       					</div>
+       					<ul></ul>
+       					<div class="staffInfo">
+       						<span class="name"><em class="positionIcon"></em>沙河校区</span>
+       						<span class="num"><em class="peopleIcon"></em>33人<em class="directionIcon"></em></span>
+       					</div>
+       					<ul>
+       						<li><span>张三</span><button>定位</button></li>
+       						<li><span>张三</span><button>定位</button></li>
+       						<li><span>张三</span><button>定位</button></li>
+       						<li><span>张三</span><button>定位</button></li>
+       						<li><span>张三</span><button>定位</button></li>
+       						<li><span>张三</span><button>定位</button></li>
+       						<li><span>张三</span><button>定位</button></li>
+       						<li><span>张三</span><button>定位</button></li>
+       						<li><span>张三</span><button>定位</button></li>
+       					</ul>
+       				</div>
+       				<div class="areaWrap scroll">
+       					<div class="areaInfo">
+       						<p class="title">深圳大学区</p>
+       						<p class="event"><span><em></em>事件</span><span class="right">327人</span></p>
+       						<p class="plan"><span><em></em>计划到岗人数</span><span class="right">21人</span></p>
+       						<p class="actual"><span><em></em>实际到岗人数</span><span class="right">19人</span></p>
+       					</div>
+       					<div class="areaInfo">
+       						<p class="title">华侨城区</p>
+       						<p class="event"><span><em></em>事件</span><span class="right">327人</span></p>
+       						<p class="plan"><span><em></em>计划到岗人数</span><span class="right">21人</span></p>
+       						<p class="actual"><span><em></em>实际到岗人数</span><span class="right">19人</span></p>
+       					</div>
+       					<div class="areaInfo">
+       						<p class="title">世界之窗区</p>
+       						<p class="event"><span><em></em>事件</span><span class="right">327人</span></p>
+       						<p class="plan"><span><em></em>计划到岗人数</span><span class="right">21人</span></p>
+       						<p class="actual"><span><em></em>实际到岗人数</span><span class="right">19人</span></p>
+       					</div>
+       					<div class="areaInfo">
+       						<p class="title">白石洲区</p>
+       						<p class="event"><span><em></em>事件</span><span class="right">327人</span></p>
+       						<p class="plan"><span><em></em>计划到岗人数</span><span class="right">21人</span></p>
+       						<p class="actual"><span><em></em>实际到岗人数</span><span class="right">19人</span></p>
+       					</div>
+       				</div>
+        		</div>	
+        	</div>
+        	<div class="block_part2">
+        		<div class="part2_icon">
+        			<em>22</em>
+        			<img src="images/bellIcon.png"/>
+        		</div>
+        		<div class="content">
+        			<i></i>
+        			<p class="column">通知栏</p>
+        			<div class="scroll message">
+        				<ul>
+        					<li><span>陈晓明已经离开岗位</span><span class="time">11:06pm</span></li>
+        					<li><span>陈晓明已经离开岗位</span><span class="time">11:06pm</span></li>
+        					<li><span>陈晓明已经离开岗位</span><span class="time">11:06pm</span></li>
+        					<li><span>陈晓明已经离开岗位</span><span class="time">11:06pm</span></li>
+        					<li><span>陈晓明已经离开岗位</span><span class="time">11:06pm</span></li>
+        					<li><span>陈晓明已经离开岗位</span><span class="time">11:06pm</span></li>
+        					<li><span>陈晓明已经离开岗位</span><span class="time">11:06pm</span></li>
+        					<li><span>陈晓明已经离开岗位</span><span class="time">11:06pm</span></li>
+        					<li><span>陈晓明已经离开岗位</span><span class="time">11:06pm</span></li>
+        					<li><span>陈晓明已经离开岗位</span><span class="time">11:06pm</span></li>
+        				</ul>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+        <div class="footer">
+        	<img src="images/logo.png">
+        	<p>&copy;copyright 2008-2014 koronsoft Inc. All Rights Reserved</p>
+        </div>
+    </div>
+</body>
+
+</html>

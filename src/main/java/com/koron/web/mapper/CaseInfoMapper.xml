@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koron.web.mapper.CaseInfoMapper">
+	<select id="getCaseInfoById" resultType="com.koron.web.bean.CaseInfoBean">
+		select a.*,b.name as casename,b.description,b.lng,b.lat,b.picid,b.address,b.status,c.name as username,c.phone,c.rangeid
+		from tblcasehandel a
+		left join tblcase b
+		on b.id = a.caseid
+		left join personinfo c
+		on c.id = a.userid
+		where a.id = #{id}
+	</select>
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koron.web.mapper.FileMapper">
+<select parameterType="com.koron.web.bean.query.FileQueryBean" resultType="com.koron.web.bean.FileBean" id="listFile">
+select * from tblfile
+<trim prefix="where" prefixOverrides="and|or">
+<if test="key!=null and key!=''">and `key` like concat('%',#{key},'%')</if>
+<if test="description!=null and description!=''">and `description` like concat('%',#{description},'%')</if>
+</trim>
+order by id desc
+limit #{offset},#{pageCount}
+</select>
+<insert keyProperty="id" useGeneratedKeys="true" parameterType="com.koron.web.bean.FileBean" id="addFile">
+insert into `tblfile`
+(`key`,`url`,`mimetype`,`description`) values 
+(#{key},#{url},#{mimetype},#{description})
+</insert>
+<delete parameterType="java.lang.Integer" id="deleteFile">delete from `tblfile` where `id` = #{id}</delete>
+<update parameterType="com.koron.web.bean.FileBean" id="updateFile">update `tblfile` set 
+`key`=#{key},
+`description`=#{description}
+where id=#{id}</update>
+<select resultType="java.lang.Integer" parameterType="com.koron.web.bean.query.FileQueryBean" id="listFileCount">
+select count(*) from tblfile
+<trim prefix="where" prefixOverrides="and|or">
+<if test="key!=null and key!=''">and `key` like concat('%',#{key},'%')</if>
+<if test="description!=null and description!=''">and `description` like concat('%',#{description},'%')</if>
+</trim>
+</select>
+<select resultType="com.koron.web.bean.FileBean" id="getFileById">select * from `tblfile` where `id`=#{id}</select>
+<select resultType="com.koron.web.bean.FileBean" id="getFileByKey">select * from `tblfile` where `key`=#{key}</select>
+<update parameterType="java.lang.Integer" id="addNum">update `tblfile` set 
+linknum=linknum+1
+where id=#{id}</update>
+<select resultType="java.lang.Integer" parameterType="java.lang.String" id="getFileCountByKey">
+select count(*) from tblfile where `key` like #{key}
+</select>
+<update parameterType="java.lang.String" id="clearFileKey">
+update tblfile set `key`=null where `key` = #{key}
+</update>
+</mapper>

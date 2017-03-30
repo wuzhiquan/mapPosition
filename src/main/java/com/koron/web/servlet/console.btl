@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>控制台</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/jquery-form.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/dialog-min.js" type="text/javascript" charset="utf-8"></script>
+
+    <link href="fonts/fontello/css/fontello.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main.css?v=1.0"/>
+    <link href="css/normalize.css" rel="stylesheet" type="text/css" />
+    <link href="css/console.css" rel="stylesheet" type="text/css" />
+    <link href="css/ui-dialog.css" rel="stylesheet" type="text/css" />
+    <script src="http://webapi.amap.com/maps?v=1.3&key=304b262be92c183132c134b43a87d7d2&plugin=AMap.PolyEditor"></script>
+<body>
+    <div class="container">
+        <div class="box" id="map"></div>
+        <div id="tip">
+    		<input type="text" id="keyword" name="keyword" placeholder="请输入关键字：(选定后搜索)" onfocus='this.value=""'/>
+		</div>
+        <div class="opeArea">
+        	<div class="block_part1">
+        		<div class="part1_icon">
+        			<img src="images/icon1.png"/>
+        		</div>
+        		<div class="content">
+        			<i></i>
+        			<div class="block-bar">
+        				<span class="staffbar active">在勤人员列表</span>
+        				<span class="areabar">区域列表</span>
+        			</div>
+        			<div class="staffWrap scroll" id="person">
+       			</div>
+       			<div class="areaWrap scroll" id="essentials">
+    				</div>
+        		</div>	
+        	</div>
+        	<div class="block_part2">
+        		<div class="part2_icon">
+        			<em></em>
+        			<img src="images/bellIcon.png"/>
+        		</div>
+        		<div class="content">
+        			<i></i>
+        			<p class="column">通知栏</p>
+        			<div class="scroll message">
+        				<ul></ul>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+        <div id="mask">
+        	<div class="talkArea">
+        		<img alt="" src="images/close.png" id="closeMask">
+        		<p id="userName"></p>
+        		<div class="history scroll">
+        			<ul id="historyList"></ul>
+        		</div>
+        		<div class="sendMsg">
+        			<div id="showImg"></div>
+        			<textarea id="msgTextarea"></textarea>
+        			<form id="fileform" method="post" action="${ctxPath}/file/upload.htm" enctype="multipart/form-data">
+						<!-- <input type="text" name="upfile" id="upfile" style="border:1px dotted #ccc"> -->
+						<input type="button" value="选择图片" onclick="file.click()"/>
+						<!-- <input type="file" name="file" id="file" onchange="upfile.value=this.value" style="display:none;" accept="image/jpeg,image/png,image/bmp,image/gif"/> -->
+						<input type="file" name="file" id="file" style="display:none;" accept="image/jpeg,image/png,image/bmp,image/gif"/>
+					</form>
+					<button onclick="send();">发送</button>
+        		</div>	
+        	</div>
+        </div>
+        <div id="caseMask">
+        	<div class="caseMaskInner">
+        		<img alt="" src="images/close.png" id="closeCaseMask">
+        		<p class="title"><span>案件标题</span><input type="text" id="caseName" placeholder="请输入案件标题"/></p>
+        		<p>案件描述</p>
+	        	<textarea id="caseTextarea" placeholder="请输入案件描述"></textarea>
+	        	<div class="casePic">
+	        		<form id="caseform" method="post" action="${ctxPath}/file/upload.htm" enctype="multipart/form-data">
+						<input type="button" value="选择图片" onclick="casefile.click()"/>
+						<input type="file" name="file" id="casefile" style="display:none;" accept="image/jpeg,image/png,image/bmp,image/gif"/>
+					</form>
+	       			<div id="showCaseImg"></div>
+	        	</div>
+				<button onclick="newCase();">发送</button>
+        	</div>
+        </div>
+        <div class="footer">
+        	<img src="images/logo.png">
+        	<p>&copy;copyright 2008-2017 koronsoft Inc. All Rights Reserved</p>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+// 定义聊天框的高度
+$('.history').css("max-height", $(window).height()-160);
+// 暂时取消自动读取数据
+/*setInterval(function(){
+	if($('#inputid').val()){
+		msghistory($('#inputid').val());
+	}
+},20000);*/
+var contentPath = '${@com.koron.util.Config.getContentpath()}';
+// 聊天框的flie发生改变时
+$("#file").change(function (){
+	var fil = this.files;
+	console.log(fil);
+	for (var i = 0; i < fil.length; i++) {
+		reads(fil[i]);
+	}
+});
+// 预览图片
+function reads(fil){
+	var reader = new FileReader();
+	reader.readAsDataURL(fil);
+	reader.onload = function(){
+		document.getElementById("showImg").innerHTML += "<img src='"+reader.result+"' style='max-width:100%;max-height:85px;'>";
+		$("#showImg").append("<span class='closeShowImg'>×</span>");
+		$(".closeShowImg").click(function (){
+			$("#showImg").empty();
+			$("#file").val('');
+		});
+	};
+}
+// 案件部分的file发生改变时
+$("#casefile").change(function (){
+	var fil = this.files;
+	console.log(fil);
+	for (var i = 0; i < fil.length; i++) {
+		caseReads(fil[i]);
+	}
+});
+// 预览图片
+function caseReads(fil){
+	var reader = new FileReader();
+	reader.readAsDataURL(fil);
+	reader.onload = function(){
+		document.getElementById("showCaseImg").innerHTML += "<img src='"+reader.result+"' style='max-width:438px;max-height:188px;'>";
+		$("#showCaseImg").append("<span class='closeShowImg'>×</span>");
+		$("#showWord").remove();
+		$(".closeShowImg").click(function (){
+			$("#showCaseImg").empty();
+			$("#casefile").val('');
+			$("#showCaseImg").append("<span id='showWord'>图片预览区域</span>");
+		});
+	};
+}
+// 通过用户的id拉取全部的聊天记录
+function msghistory(userid) {
+	console.log(userid);
+	commitData("${ctxPath}/WXmessageAllList.htm",{
+		userid: userid
+	},{success:function (temp){
+		console.log(temp);
+		$("#historyList").empty();
+		var scrollTop = $(window).height()+ 3000;
+		temp.list.forEach(function(item){
+			var o = item.status == 3 ? '控制中心' : $("#userName").text();
+			var style = item.status == 3 ? 'own' : 'order';
+			if(item.msgType == 'image'){
+				var li = $('<li class="'+style+'">'+
+				 '<p>'+item.createTime+'&nbsp;&nbsp;&nbsp;'+o+'</p>'+
+				 '<img src="${ctxPath}/file/get.htm?id='+item.picUrl+'" style="max-width:200px;"/>'+
+				 '</li>');
+				var img = new Image();
+				img.src = "${ctxPath}/file/get.htm?id="+item.picUrl;
+				img.onload = function (){
+					scrollTop += li.height();
+					$(".history").animate({scrollTop:scrollTop}, 0);
+				}
+				li.click(function(){
+					console.log(img.src);
+					var d = dialog({
+					    title: '查看图片',
+					    content: '<img src="'+img.src+'" style="margin: 0 auto;display: block;max-width:100%;max-height:500px;"/>',
+					    width:600
+					});
+					d.showModal();
+				});
+			}
+			if(item.msgType == 'text'){
+				var li = $('<li class="'+style+'">'+'<p>'+item.createTime+'&nbsp;&nbsp;&nbsp;'+o+'</p><span class="box">'+item.content+'</span></li>');
+				scrollTop += li.height();
+				$(".history").animate({scrollTop:scrollTop}, 0);
+			}
+			if(item.msgType == 'location') {
+				var li = $('<li class="'+style+'">'+'<p>'+item.createTime+'&nbsp;&nbsp;&nbsp;'+o+'</p><span class="box">[定位信息]&nbsp;'+item.label+'</span></li>');
+				scrollTop += li.height();
+				$(".history").animate({scrollTop:scrollTop}, 0);
+			}
+			$("#historyList").append(li);
+		});
+	}
+	})
+}
+// 发送消息
+function send() {
+	if($("#msgTextarea").val() == "" && $("#file").val() == "") {
+		var d = dialog({
+			title: '提示',
+		    content: '发送消息不能为空！'
+		});
+		d.showModal();
+		setTimeout(function () {
+		    d.close().remove();
+		}, 1500);
+		return;
+	}
+	// 发送文字消息
+	if ($("#msgTextarea").val() != "") {
+		commitData("${ctxPath}/sendMessage.htm",{
+			content: $('#msgTextarea').val(),
+			id: $("#inputid").val()
+		},{
+			success: function (data) {
+				console.log(data);
+				if(data.code == 0) {
+					commitData("${ctxPath}/addWXmessageSend.htm",{
+						content: $('#msgTextarea').val(),
+						userid: $("#inputid").val(),
+						msgType:"text"
+					},{success:function (temp){
+						console.log(temp);
+						msghistory($("#inputid").val());
+						$('#msgTextarea').val("");
+					}})
+				}else{
+					var d1 = dialog({
+					    content: '信息发送失败！'
+					});
+					d1.showModal();
+					setTimeout(function () {
+					    d1.close().remove();
+					}, 1000)
+				}
+			}
+		})
+	}
+	// 发送图片消息
+	if($("#file").val() != ""){
+		$("#fileform").ajaxSubmit(function(message) {
+			var obj = JSON.parse(message);
+			var picid = obj.data;
+			console.log(picid);
+			commitData("${ctxPath}/file/getMedia_id.htm",{id: picid},{success:function(data) {
+				console.log(data.media_id);
+				var meadi_id = data.media_id;
+				commitData("${ctxPath}/sendImageMessage.htm",{id: $("#inputid").val(),media_id:meadi_id},{success:function(msg) {
+					console.log(msg);
+					if(msg.code == 0){
+						commitData("${ctxPath}/addWXmessageSend.htm",{
+							picUrl: picid,
+							userid: $("#inputid").val(),
+							msgType:"image"
+						},{success:function (temp){
+							console.log(temp);
+							msghistory($("#inputid").val());
+							$("#showImg").empty();
+							$("#file").val('');
+						}})
+					}else{
+						var d1 = dialog({
+						    content: '信息发送失败！'
+						});
+						d1.showModal();
+						setTimeout(function () {
+						    d1.close().remove();
+						}, 1000);
+					}
+				}});
+				console.log(meadi_id);
+			}});
+		});
+	}
+}
+// 新建案件
+function newCase() {
+	if($("#caseTextarea").val() == "" || $("#caseName").val() == "") {
+		var d = dialog({
+			title: '提示',
+		    content: '案件标题跟案件描述不能为空！'
+		});
+		d.showModal();
+		setTimeout(function () {
+		    d.close().remove();
+		}, 1500);
+		return;
+	}
+	var sendData = {
+		name: $("#caseName").val(),
+		description: $("#caseTextarea").val(),
+		status: 0,
+		lng:$("#caselng").val(),
+		lat:$("#caselat").val(),
+		address: $("#caseAddress").val()
+	}
+	// 有图片的情况
+	if($("#casefile").val() != ""){
+		$("#caseform").ajaxSubmit(function(message) {
+			var obj = JSON.parse(message);
+			console.log(obj.data);
+			sendData.picid = obj.data;
+			commitData("${ctxPath}/addCase.htm",sendData,{success:function (temp){
+				caseCallback(temp, obj.data);
+			}});
+		});
+	}else {
+		// 没有图片的案件
+		commitData("${ctxPath}/addCase.htm",sendData,{success:function(temp){
+			caseCallback(temp, null);
+		}});
+	}
+	// 案件创建成功后的回掉函数
+	function caseCallback(temp, picid){
+		console.log(picid);
+		console.log(temp);
+		if(temp.code == 0){
+			$("#caseMask").hide(function(){
+				var lng = $("#caselng").val();
+				var lat = $("#caselat").val();
+				var caseName = $("#caseName").val();
+				var description = $("#caseTextarea").val();
+				var address = $("#caseAddress").val();
+				var src = "";
+				console.log($("#showCaseImg img")[0]);
+				if($("#showCaseImg img")[0]){
+					src = $("#showCaseImg img")[0].src;
+				}
+				$("#showCaseImg").empty();
+				$("#casefile").val('');
+				$("#caseName").val('');
+				$("#caseTextarea").val('');
+				$("#caselng").remove();
+				$("#caselat").remove();
+				$("#caseAddress").remove();
+				// 创建案件的图标，并添加相应的点击方法
+				var newMaker = new AMap.Marker({
+		             icon: "${ctxPath}/images/redthing.png",
+		             position: [lng, lat],
+		             draggable : true,
+		     		 cursor : 'move',
+		     		 raiseOnDrag : true
+		        });
+				newMaker.setMap(map);
+				newMaker.setLabel({
+					offset : new AMap.Pixel(0, 64),
+					content : caseName
+				});
+				newMaker.on("click", function(e) {
+					var contextMenu = new AMap.ContextMenu();
+					contextMenu.addItem("案件描述", function() {
+						if(src != ""){
+							var content = "<p>"+description+"</p><img src='"+src+"' style='max-width:350px;max-height:400px;display:block;margin:0 auto;'/>";
+						} else {
+							var content = description;
+						}
+						var d = dialog({
+						    title: '案件描述',
+						    content: content,
+						    width:400
+						});
+						d.showModal();
+					}, 0);
+					contextMenu.addItem("案件地址", function() {
+						var d = dialog({
+						    title: '地址',
+						    content: address,
+						    width:400
+						});
+						d.showModal();
+					}, 0);
+					contextMenu.addItem("案件指派", function() {
+						var d = dialog({
+						    title: '指派人',
+						    content: "输入指派人：<input id='zhipairen'/>",
+						    width:400,
+						    okValue: '指派',
+						    ok: function () {
+						    	commitData("${ctxPath}/getPersonByName.htm",{name: $("#zhipairen").val()},{success:function(user){
+									var picurl = picid ? contentPath+'/file/get.htm?id='+picid : '';
+									// 添加案件处理信息
+									commitData("${ctxPath}/addCaseHandel.htm",{
+										userid: user.data.id,
+										caseid: temp.data,
+										remark: '备注',
+										status: 0
+									},{success:function(_msg) {
+										console.log(_msg);
+										if(_msg.code == 0) {
+											var data = {
+												id: user.data.id,
+												title: caseName,
+												description: description,
+												picUrl: contentPath+'/viewcaseinfo.htm?id='+_msg.data,
+												url: picurl
+											}
+											// 发送消息
+											commitData("${ctxPath}/sendCaseMessage.htm",data,{success:function(msg) {
+												console.log(msg);
+											}});
+										}
+									}});
+								}});
+						    }
+						});
+						d.showModal();
+					}, 0);
+					contextMenu.open(map, e.lnglat);
+				});
+			});
+		}
+	}
+}
+</script>
+<script src="js/console.js" type="text/javascript" charset="utf-8"></script>
+</html>

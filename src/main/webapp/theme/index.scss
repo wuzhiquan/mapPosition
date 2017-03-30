@@ -1,0 +1,150 @@
+@import "global";
+@import "variable";
+@import "theme";
+@media screen and (min-width: 1024px) {//电脑
+	html {
+		font-size: 16px;
+	}
+}
+
+@media screen and (max-width: 1024px) {//手机
+	html {
+		font-size: 12px;
+	}
+}
+
+.contain {
+	width: 100%;
+	height: 100%;
+	display: table;
+	font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif,PingFangSC-Regular;
+}
+
+.main-header {
+	width: 100%;
+	height: auto;
+	display: table-row;
+	@media screen and (min-width: 1024px) {
+		height: 3rem;
+		.title {
+			width: $width_sidebar;
+			float: left;
+		}
+		.info-bar {
+			margin-left: $width_sidebar;
+		}
+	}
+	@media screen and (max-width: 1024px) {
+		height: 6rem;
+		.title {
+			width: 100%;
+		}
+	}
+	.title {
+		height: 3rem;
+		display: block;
+		background-color: darken($color_main_color, 20%);
+		color: $color_front_color;
+		line-height: 3rem;
+		font-size: 1.125rem;
+		font-weight: medium;
+		text-align: center;
+	}
+	.info-bar {
+		background-color: $color_main_color;
+		height: 3rem;
+		color: $color_front_color;
+		line-height: 3rem;
+		padding-right: 1rem;
+		>i{
+			float:left;
+			display:block;
+			font-size:1.5rem;
+			padding-left:1rem;
+		}
+		span {
+			font-size: 1.5rem;
+			position: relative;
+			display: inline-block;
+			float: right;
+			padding-right: 0.5rem;
+			margin-right: 1rem;
+			em {
+				position: absolute;
+				top: 0.125rem;
+				right: 0;
+
+				&.info {
+					@include number-tag($color_background_information, 0.375rem, 1rem);
+				}
+				@each $tag,$c in $color_map{
+				&.#{$tag} {
+					@include number-tag(#{$c}, 0.375rem, 1rem);
+				}
+			}
+			}
+		}
+	}
+}
+
+.main-body {
+	display: table-row;
+	>div{
+		display:table-cell;
+	}
+	@media screen and (min-width: 1024px) {
+		.menu {
+			display: block;
+			//float: left;
+			height:calc(100% - 3rem);
+			position:absolute;
+		}
+		.content {
+			margin-left: $width_sidebar;
+		}
+	}
+	@media screen and (max-width: 1024px) {
+		.menu {
+			display: none;
+			position: absolute;
+			height: calc(100% - 6rem);
+		}
+	}
+	.menu {
+		width: $width_sidebar;
+		background-color: $color_background_sidebar;
+		color: $color_front_color;
+		line-height: 2rem;
+		text-align: center;
+		font-size: 0.875rem;
+		overflow:auto;
+		h4 {
+			font-weight: medium;
+		}
+	}
+	.content {
+		background-color: $color_background_content;
+		color: $color_front_color;
+		height: 100%;
+		iframe {
+			width: 100%;
+			height: 100%;
+			border: 0px;
+		}
+	}
+}
+
+.nav-menu {
+	@include menu();
+	.sub-menu {
+		display:none;
+		@include menu(lighten($color_background_sidebar, 5%), 2rem,0.75rem);
+	}
+}
+
+.widget-container{
+	@include widget-container();
+	dl{
+		@include widget($radius:10px);
+	}
+}

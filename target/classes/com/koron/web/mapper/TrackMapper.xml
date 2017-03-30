@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koron.web.mapper.TrackMapper">
+	<insert id="addTrack" useGeneratedKeys="true" keyProperty="id"  parameterType="com.koron.web.bean.TrackBean">
+	   insert into 
+	   track(lng,lat,createTime,userId) 
+	   values(#{lng},#{lat},current_timestamp(),#{userId})
+	</insert>
+	<select id="list" resultType="com.koron.web.bean.TrackBean">
+		select * from `track` where `userId` = #{userid}
+	</select>
+</mapper>

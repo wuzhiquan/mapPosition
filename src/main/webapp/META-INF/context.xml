@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+	<!--Resource name="jndi/mysql" auth="Container" type="javax.sql.DataSource"
+		driverClassName="com.mysql.jdbc.Driver"
+		url="jdbc:mysql://120.24.220.214:3306/hf?useUnicode=true&amp;AutoReconnect=true&amp;characterEncoding=utf-8"
+		username="swan" password="swan" maxTotal="100" maxIdle="10"
+		maxWaitMillis="10000" /-->
+	<Resource name="jndi/mysql" auth="Container" type="javax.sql.DataSource"
+		driverClassName="com.mysql.cj.jdbc.Driver"
+		url="jdbc:mysql://120.24.220.214:3306/map?useUnicode=true&amp;AutoReconnect=true&amp;characterEncoding=utf-8"
+		username="swan" password="swan" maxTotal="100" maxIdle="10"
+		maxWaitMillis="10000" />
+</Context>

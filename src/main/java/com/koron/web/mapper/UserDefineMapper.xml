@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koron.web.mapper.UserDefineMapper">
+	<select id="getFieldBeans" resultType="com.koron.web.bean.DefineFieldBean">select * from tblfieldbean where layerid=#{layerId} order by sn</select>
+	<select id="getFieldBean" resultType="com.koron.web.bean.DefineFieldBean">select * from tblfieldbean where layerid=#{layerId} and name = #{name}</select>
+	<delete id="removeFieldBean">delete from tblfieldbean where id = #{id}</delete>
+	<insert id="addFieldBean" parameterType="com.koron.web.bean.DefineFieldBean">insert into `tblfieldbean`
+		(`name`,`layerid`,`caption`,`desc`,`type`,`className`,`param`,`length`,`defaultValue`,`flag`,`sn`,`validate`) values
+		(#{name},#{layerid},#{caption},#{desc},#{type},#{className},#{param},#{length},#{defaultValue},#{flag},#{sn},#{validate})</insert>
+	<update id="updateFieldBean" parameterType="com.koron.web.bean.DefineFieldBean">update `tblfieldbean` set
+		`id`=#{id},
+		`name`=#{name},
+		`layerid`=#{layerid},
+		`caption`=#{caption},
+		`desc`=#{desc},
+		`type`=#{type},
+		`className`=#{className},
+		`param`=#{param},
+		`length`=#{length},
+		`defaultValue`=#{defaultValue},
+		`flag`=#{flag},
+		`sn`=#{sn},
+		`validate`=#{validate}
+		where id = #{id}</update>
+	<insert id="addLayer" parameterType="com.koron.web.bean.LayerBean">insert into `tbllayer`
+		(`name`,`parentid`,`inherit`) values
+		(#{name},#{parentid},#{inherit})</insert>
+	<delete id="removeLayer">delete from `tbllayer` where id = #{id}</delete>
+	<update id="updateLayer" parameterType="com.koron.web.bean.LayerBean">update `tbllayer` set
+		`name`=#{name},
+		`parentid`=#{parentid},
+		`inherit`=#{inherit}
+		where id = #{id}</update>
+	<select id="getLaysers" resultType="com.koron.web.bean.LayerBean">select * from `tbllayer`
+		where `parentid`= #{groupId}</select>
+	<select id="getLayerBean" resultType="com.koron.web.bean.LayerBean">select * from `tbllayer`
+		where id= #{id}</select>
+	<select id="getLayerBeanByNamePid" resultType="com.koron.web.bean.LayerBean">select * from `tbllayer`
+		where name = #{name} and parentid = #{parentId}</select>
+	<insert keyProperty="id" useGeneratedKeys="true" parameterType="com.koron.web.bean.EnumDBBean" id="addEnum">insert into `tblenum`
+		(`key`,`isbit`,`type`,`param`) values
+		(#{key},#{isbit},#{type},#{param})</insert>
+	<update parameterType="com.koron.web.bean.EnumDBBean" id="updateEnum">update `tblenum` set
+		`key`=#{key},
+		`isbit`=#{isbit},
+		`type` = #{type},
+		`param`= #{param}
+		where id = #{id}</update>
+	<delete id="deleteEnum">delete from `tblenum`
+		where id = #{id}</delete>
+	<insert keyProperty="id" useGeneratedKeys="true" parameterType="com.koron.web.bean.EnumDetailDBBean" id="addEnumItem">insert into `tblenumdetail`
+		(`enumid`,`key`,`value`) values
+		(#{enumid},#{key},#{value})</insert>
+	<delete id="deleteEnumItem">delete from `tblenumdetail`
+		where id = #{id}</delete>
+	<delete id="deleteEnumItemByEnumId">delete from `tblenumdetail`
+		where enumId = #{enumId}</delete>
+	<select resultType="com.koron.web.bean.EnumDBBean" id="getEnumById">select * from `tblenum`
+		where id = #{id}</select>
+	<select resultType="com.koron.web.bean.EnumDetailDBBean" id="getEnumDetailByEnumId">select * from `tblenumdetail` where enumid = #{enumId}</select>
+	<select resultType="com.koron.web.bean.EnumDBBean" id="getEnumByKey">select * from `tblenum` where `key` = #{key}</select>
+	
+	<select resultType="java.lang.String" id="getSysParam">
+		select `value`
+		from `tblsysparam`
+		where `key`=#{key}
+	</select>
+</mapper>

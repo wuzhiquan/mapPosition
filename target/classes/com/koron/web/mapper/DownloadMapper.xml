@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.koron.web.mapper.DownloadMapper">
+	<select parameterType="com.koron.web.bean.DownloadBean" resultType="com.koron.web.bean.FileBean" id="listFile">
+		select * from tbldown
+		<trim prefix="where" prefixOverrides="and|or">
+		<if test="key!=null and key!=''">and `key` like concat('%',#{key},'%')</if>
+		<if test="description!=null and description!=''">and `description` like concat('%',#{description},'%')</if>
+		</trim>
+		order by id desc
+		limit #{offset},#{pageCount}
+	</select>
+	
+	<insert keyProperty="id" useGeneratedKeys="true" parameterType="com.koron.web.bean.DownloadBean" id="addFile">
+		insert into `tbldown`
+			(`url`,`mimetype`,`description`,`filename`,`flag`) values 
+			(#{url},#{mimetype},#{description},#{filename},#{flag})
+	</insert>
+	<delete parameterType="java.lang.Integer" id="deleteFile">
+		delete from `tblfile` where `id` = #{id}
+	</delete>
+	<select resultType="java.lang.Integer" parameterType="com.koron.web.bean.query.FileQueryBean" id="listFileCount">
+		select count(*) from tbldown
+		<trim prefix="where" prefixOverrides="and|or">
+		<if test="description!=null and description!=''">and `description` like concat('%',#{description},'%')</if>
+		</trim>
+	</select>
+	<select resultType="com.koron.web.bean.DownloadBean" id="getFileById">
+		select * from `tbldown` where `id`=#{id}
+	</select>
+	<update parameterType="com.koron.web.bean.DownloadBean" id="cheangFlag">
+		update tbldown set `flag`=#{flag} where `id` = #{id}
+	</update>
+	<update parameterType="com.koron.web.bean.DownloadBean" id="updateDownloadFile">
+		update tbldown set `flag`= #{flag},`description`= #{description} where `id` = #{id}
+	</update>
+	
+	<select id="queryFileList" resultType="com.koron.web.bean.DownloadBean" 
+			parameterType="com.koron.web.bean.query.DownQueryBean">
+		select * from tbldown
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="filename!=null and filename!=''">and filename like concat('%',#{filename},'%')</if>
+			<if test="description!=null and description!=''">and description like concat('%',#{description},'%')</if>
+			<if test="start != null and start !='' ">and `createtime` &gt;= FROM_UNIXTIME(#{start}) </if>
+			<if test="end != null and end !='' ">and `createtime` &lt;= FROM_UNIXTIME(#{end}) </if>
+		</trim>
+		order by createtime desc
+		limit #{offset},#{pageCount}
+	</select>
+	<select resultType="java.lang.Integer" 
+		parameterType="com.koron.web.bean.query.DownQueryBean" id="queryFileListCount">
+		select count(*)
+		from  tbldown 
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="filename!=null and filename!=''">and filename like concat('%',#{filename},'%')</if>
+			<if test="description!=null and description!=''">and description like concat('%',#{description},'%')</if>
+			<if test="start != null and start !='' ">and `createtime` &gt;= FROM_UNIXTIME(#{start}) </if>
+			<if test="end != null and end !='' ">and `createtime` &lt;= FROM_UNIXTIME(#{end}) </if>
+		</trim>
+	</select>	
+</mapper>
